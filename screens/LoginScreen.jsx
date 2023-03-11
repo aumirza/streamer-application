@@ -13,7 +13,7 @@ export function LoginScreen() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: colors.primary,
+        backgroundColor: "white",
       }}
     >
       <LoginForm />

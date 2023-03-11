@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, Animated } from "react-native";
-import { Text } from "react-native-paper";
+import { Text, useTheme } from "react-native-paper";
 import FontAwesomeIcon from "react-native-vector-icons/FontAwesome5";
 
 const TabRoute = ({ route, options, navigation, isFocused, position }) => {
@@ -38,11 +38,10 @@ const TabRoute = ({ route, options, navigation, isFocused, position }) => {
       testID={options.tabBarTestID}
       onPress={onPress}
       onLongPress={onLongPress}
-      style={{ flex: 1 }}
     >
       <Animated.Text
         style={{
-          fontSize: isFocused ? 13 : 11,
+          fontSize: isFocused ? 15 : 13,
           transition: "all 0.3s ease",
           fontWeight: "bold",
           textTransform: "uppercase",
@@ -56,6 +55,7 @@ const TabRoute = ({ route, options, navigation, isFocused, position }) => {
 };
 
 export function TabBarWithSearch({ state, descriptors, navigation, position }) {
+  const { colors } = useTheme();
   const borderPosition = position.interpolate({
     inputRange: state.routes.map((_, i) => i),
     outputRange: state.routes.map((_, i) => (i * 280) / state.routes.length),
@@ -66,9 +66,9 @@ export function TabBarWithSearch({ state, descriptors, navigation, position }) {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-        paddingVertical: 10,
-        paddingHorizontal: 5,
-        backgroundColor: "#6c6c6c",
+        paddingVertical: 15,
+        paddingHorizontal: 10,
+        backgroundColor: colors.background,
       }}
     >
       <View
@@ -77,7 +77,13 @@ export function TabBarWithSearch({ state, descriptors, navigation, position }) {
           maxWidth: "60%",
         }}
       >
-        <View style={{ flexDirection: "row" }}>
+        <View
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-around",
+            flex: 1,
+          }}
+        >
           {state.routes.map((route, index) => (
             <TabRoute
               key={route.key}
@@ -110,7 +116,7 @@ export function TabBarWithSearch({ state, descriptors, navigation, position }) {
             name="search"
             style={{
               flex: 1,
-              fontSize: 20,
+              fontSize: 23,
               color: "white",
             }}
           />

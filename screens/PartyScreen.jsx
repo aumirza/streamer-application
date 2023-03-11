@@ -3,8 +3,8 @@ import React from "react";
 
 export function PartyScreen() {
   return (
-    <View>
-      <Text>PartyScreen</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>No party</Text>
     </View>
   );
 }

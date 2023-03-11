@@ -1,6 +1,3 @@
-// create a signup form component, which will be used to create a new user, uses react-native-paper ,
-// and is exported as SignupForm, which is used in SignupScreen,it has a username, email, password, and a submit button to create a new user and continue with google button , and a login button to navigate to the login screen , on submit it will call the signup function which will log the details to the console
-
 import { Text, TextInput, Button, useTheme } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
@@ -9,8 +6,13 @@ import { View } from "react-native";
 export function SignupForm() {
   const navigator = useNavigation();
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState(null);
 
   const toggleShowPassword = () => setShowPassword(!showPassword);
+
+  const submitHandler = () => {
+    setError("SignUp Not allowed");
+  };
 
   const { colors } = useTheme();
   return (
@@ -21,22 +23,22 @@ export function SignupForm() {
         width: 300,
       }}
     >
-      <Text
-        variant="displayMedium"
-        style={{ color: "white", fontWeight: "bold" }}
-      >
+      <Text variant="displayMedium" style={{ fontWeight: "bold" }}>
         Signup
       </Text>
+      {error ? <Text style={{ color: "red" }}>{error}</Text> : ""}
       <TextInput
         style={{ marginTop: 10, width: "100%" }}
         label="Username"
         mode="outlined"
+        error={error}
         left={<TextInput.Icon icon="account" iconColor={colors.primary} />}
       />
       <TextInput
         style={{ margin: 2, width: "100%" }}
         label="Email"
         mode="outlined"
+        error={error}
         left={<TextInput.Icon icon="email" iconColor={colors.primary} />}
       />
       <TextInput
@@ -44,6 +46,7 @@ export function SignupForm() {
         style={{ marginBottom: 10, width: "100%" }}
         label="Password"
         mode="outlined"
+        error={error}
         right={
           <TextInput.Icon
             icon={showPassword ? "eye-off" : "eye"}
@@ -59,7 +62,7 @@ export function SignupForm() {
           backgroundColor: colors.secondary,
         }}
         mode="contained"
-        onPress={() => console.log("Pressed")}
+        onPress={submitHandler}
       >
         <Text style={{ color: "white", fontSize: 20 }}>Signup</Text>
       </Button>
@@ -71,11 +74,9 @@ export function SignupForm() {
           width: "100%",
         }}
       >
-        <Text style={{ color: "white" }}>Already have an account? </Text>
+        <Text>Already have an account? </Text>
         <Button mode="text" onPress={() => navigator.navigate("Login")}>
-          <Text style={{ color: "white", textDecorationLine: "underline" }}>
-            Login
-          </Text>
+          <Text style={{ textDecorationLine: "underline" }}>Login</Text>
         </Button>
       </View>
     </View>

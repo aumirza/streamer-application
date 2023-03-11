@@ -12,7 +12,6 @@ export function SignupScreen() {
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: colors.primary,
       }}
     >
       <SignupForm />

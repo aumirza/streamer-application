@@ -5,15 +5,15 @@ import { TabBarWithSearch } from "../components/TabBarWithSearch";
 
 function Explore() {
   return (
-    <View>
-      <Text>Explore</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>No feeds</Text>
     </View>
   );
 }
 function Following() {
   return (
-    <View>
-      <Text>Followings</Text>
+    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <Text>No Followings</Text>
     </View>
   );
 }
@@ -30,17 +30,10 @@ const Tabs = createMaterialTopTabNavigator();
 
 export function FeedScreen() {
   return (
-    <Tabs.Navigator
-      initialRouteName="Explore"
-      tabBar={(props) => <TabBarWithSearch {...props} />}
-    >
+    <Tabs.Navigator initialRouteName="Following">
       <Tabs.Screen name="Following" component={Following} />
-      <Tabs.Screen
-        name="Explore"
-        component={Explore}
-        options={{ tabBarIcon: (props) => <MaterialIcon name="movie" /> }}
-      />
-      <Tabs.Screen name="Shorts" component={Shorts} />
+      <Tabs.Screen name="Explore" component={Explore} />
+      {/* <Tabs.Screen name="Shorts" component={Shorts} /> */}
     </Tabs.Navigator>
   );
 }
