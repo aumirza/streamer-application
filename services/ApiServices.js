@@ -5,8 +5,19 @@ class ApiService {
   constructor() {}
 
   getLiveStreams = async () => {
-    const response = await axios.get(ENDPOINTS.GET_LIVE_STREAMS());
-    return response;
+    return new Promise((resolve, reject) => {
+      axios
+        .get(ENDPOINTS.GET_LIVE_STREAMS())
+        .then((response) => {
+          if (response.status === 200) {
+            resolve(response.data);
+          }
+          reject(response);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   };
 
   login = async (email, password) => {

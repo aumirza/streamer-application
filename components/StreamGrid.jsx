@@ -1,21 +1,20 @@
 import { View, Text, ScrollView } from "react-native";
-import { createFakeStream } from "../data/streams";
 import { StreamCard } from "./StreamCard";
 
-const streams = createFakeStream(10);
-const streamPairs = streams.reduce((acc, stream, index) => {
-  if (index % 2 === 0) {
-    acc.push([stream]);
-  } else {
-    acc[acc.length - 1].push(stream);
-  }
-  return acc;
-}, []);
+const createPairs = (arr) =>
+  arr.reduce((acc, item, index) => {
+    if (index % 2 === 0) {
+      acc.push([item]);
+    } else {
+      acc[acc.length - 1].push(item);
+    }
+    return acc;
+  }, []);
 
-export function StreamGrid() {
+export function StreamGrid({ streams }) {
   return (
     <View>
-      {streamPairs.map((pair, index) => (
+      {createPairs(streams).map((pair, index) => (
         <View
           key={index}
           style={{

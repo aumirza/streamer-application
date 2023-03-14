@@ -1,11 +1,13 @@
 import React from "react";
 import { Image, View } from "react-native";
 import { Appbar, IconButton, Text } from "react-native-paper";
+import AuthService from "../services/AuthService";
 
 export function TopBar() {
   return (
     <Appbar.Header style={{ backgroundColor: "#fff" }} statusBarHeight={0}>
       <IconButton
+        onLongPress={() => AuthService.logout()}
         icon={() => (
           <Image
             source={require("../assets/icons/person.png")}

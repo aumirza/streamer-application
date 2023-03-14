@@ -1,13 +1,13 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
 import { IconButton } from "react-native-paper";
 
 export function NewStreamButton() {
-  const navigation = useNavigation();
+  const navigator = useNavigation();
 
   const handlePress = () => {
-    navigation.navigate("NewLiveStream");
+    navigator.navigate("NewLiveStream");
   };
+
   return (
     <IconButton
       icon="plus"

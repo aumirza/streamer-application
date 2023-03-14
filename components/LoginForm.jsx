@@ -22,23 +22,30 @@ export function LoginForm() {
       email: "",
       password: "",
     },
-    onSubmit: (values, { setSubmitting, resetForm, setError }) => {
+    onSubmit: (values, { setSubmitting, resetForm, setErrors, setStatus }) => {
       setSubmitting(true);
+      console.log(values);
       axios
         .post(ENDPOINTS.LOGIN(), values)
         .then((res) => {
+          console.log(res.data);
           if (res.data) {
             AsyncStorage.setItem("token", res.data.token);
             // AsyncStorage.setItem("user", JSON.stringify(res.data.user));
-            navigator.navigate("Home");
+            navigator.navigate("AuthenticatedStack");
           }
-          setSubmitting(false);
         })
         .catch((err) => {
-          setError(err.response.data.message);
+          console.log(err);
+          if (err.request) {
+            console.log(err.request);
+          } else {
+            setStatus(err);
+          }
+        })
+        .finally(() => {
           setSubmitting(false);
         });
-      console.log(values);
     },
   });
 
@@ -93,6 +100,13 @@ export function LoginForm() {
       ) : (
         ""
       )}
+      {formik.status ? (
+        <HelperText type="error" visible={formik.status}>
+          {formik.status}
+        </HelperText>
+      ) : (
+        ""
+      )}
       <Button
         style={{
           marginTop: 10,
@@ -101,9 +115,12 @@ export function LoginForm() {
           backgroundColor: colors.secondary,
         }}
         mode="contained"
-        onPress={submitHandler}
+        disabled={formik.isSubmitting}
+        onPress={formik.handleSubmit}
       >
-        <Text style={{ fontSize: 20, color: "white" }}>Login</Text>
+        <Text style={{ fontSize: 20, color: "white" }}>
+          {formik.isSubmitting ? "Loading..." : "Login"}
+        </Text>
       </Button>
 
       <Button

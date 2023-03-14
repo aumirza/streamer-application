@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useEffect } from "react";
 import { DefaultTheme, Provider as PaperProvider } from "react-native-paper";
@@ -27,48 +27,57 @@ const theme = {
   },
 };
 
-function AuthenticatedStack({ navigation }) {
-  const { user } = useAuth();
+function AuthenticatedStack({}) {
+  const navigator = useNavigation();
 
   useEffect(() => {
-    if (user) {
+    AsyncStorage.getItem("token").then((user) => {
       console.log("AuthenticatedStack user", user);
-      navigation.navigate("Home");
-    }
-  }, [user]);
+      if (!user) {
+        console.log("AuthenticatedStack user", user);
+        navigator.navigate("AuthStack");
+      }
+    });
+  }, []);
 
   const Stack = createNativeStackNavigator();
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen
-      name="Home"
-      component={HomeScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="NewLiveStream"
-      component={NewLiveStreamScreen}
-      options={{ headerShown: false }}
-    />
-    <Stack.Screen
-      name="LiveStream"
-      component={LiveStreamScreen}
-      options={{
-        headerShown: false,
-        animation: "fade",
-      }}
-    />
-  </Stack.Navigator>;
+
+  return (
+    <Stack.Navigator initialRouteName="Home">
+      <Stack.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="NewLiveStream"
+        component={NewLiveStreamScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="LiveStream"
+        component={LiveStreamScreen}
+        options={{
+          headerShown: false,
+          animation: "fade",
+        }}
+      />
+    </Stack.Navigator>
+  );
 }
 
-function AuthStack({ navigation }) {
-  const { user } = useAuth();
+function AuthStack() {
+  const navigator = useNavigation();
 
   useEffect(() => {
-    if (user) {
+    AsyncStorage.getItem("token").then((user) => {
       console.log("AuthStack user", user);
-      navigation.navigate("Home");
-    }
-  }, [user]);
+      if (user) {
+        console.log("AuthStack user", user);
+        navigator.navigate("AuthenticatedStack");
+      }
+    });
+  }, []);
 
   const Stack = createNativeStackNavigator();
   return (
@@ -98,22 +107,24 @@ export default function App() {
   return (
     <NavigationContainer>
       <PaperProvider theme={theme}>
-        <DrawerProvider>
-          <AuthProvider>
-            <Stack.Navigator initialRouteName="Auth">
-              <Stack.Screen
-                name="Auth"
-                component={AuthStack}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Home"
-                component={AuthenticatedStack}
-                options={{ headerShown: false }}
-              />
-            </Stack.Navigator>
-          </AuthProvider>
-        </DrawerProvider>
+        <ApiProvider>
+          <DrawerProvider>
+            <AuthProvider>
+              <Stack.Navigator initialRouteName="Auth">
+                <Stack.Screen
+                  name="AuthStack"
+                  component={AuthStack}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="AuthenticatedStack"
+                  component={AuthenticatedStack}
+                  options={{ headerShown: false }}
+                />
+              </Stack.Navigator>
+            </AuthProvider>
+          </DrawerProvider>
+        </ApiProvider>
       </PaperProvider>
     </NavigationContainer>
   );
