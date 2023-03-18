@@ -1,11 +1,16 @@
-// const HOST = "192.168.1.17";
-const HOST = "localhost";
+const HOST = "192.168.1.4";
+// const HOST = "localhost";
 
-export const API_BASE_URL = `http://${HOST}:3000/api`;
-// export const API_BASE_URL = "https://1ba6-146-196-37-45.in.ngrok.io/api";
+// export const API_BASE_URL = `http://${HOST}:5000/api`;
 const API_TIMEOUT = 10000;
 
-export const LIVE_SERVER_URL = `rtmp://${HOST}:1935/live`;
+export const API_BASE_URL = `http://backend.streamer.ahmadullah.in`;
+
+// export const LIVE_SERVER_URL = `rtmp://${HOST}:1935/live/stream`;
+// export const SOCKET_SERVER_URL = `ws://${HOST}:5000`;
+
+export const LIVE_SERVER_URL = `rtmp://live.streamer.ahmadullah.in/live/stream`;
+export const SOCKET_SERVER_URL = `ws://ws.streamer.ahmadullah.in`;
 
 export const ENDPOINTS = {
   LOGIN: () => "/auth/login",

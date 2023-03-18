@@ -22,11 +22,16 @@ class AuthService {
       console.log(error);
     }
   };
-
   getToken = async () => {
-    const token = await AsyncStorage.getItem("token");
-    console.log("AuthService getToken", token);
-    return token;
+    return new Promise((resolve, reject) => {
+      AsyncStorage.getItem("token")
+        .then((token) => {
+          resolve(token);
+        })
+        .catch((error) => {
+          reject(error);
+        });
+    });
   };
 
   getCurrentUser = async () => {

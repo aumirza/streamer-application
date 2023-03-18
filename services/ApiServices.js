@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { ENDPOINTS } from "../constants/api";
 
@@ -15,6 +16,9 @@ class ApiService {
           reject(response);
         })
         .catch((error) => {
+          if (error.response) {
+            reject(error.response);
+          }
           reject(error);
         });
     });

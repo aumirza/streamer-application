@@ -13,5 +13,5 @@ export const WithAuth = (Component) => () => {
     }
   }, [user]);
 
-  return <Component user={user} />;
+  return user ? <Component /> : null;
 };

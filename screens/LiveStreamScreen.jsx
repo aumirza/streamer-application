@@ -4,15 +4,38 @@ import React, { useRef } from "react";
 import { Image, View } from "react-native";
 import { IconButton, Text, TextInput } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
+import axios from "axios";
+import { ENDPOINTS, LIVE_SERVER_URL } from "../constants/api";
 
 export function LiveStreamScreen({ route }) {
   const navigation = useNavigation();
+
+  const [stream, setStream] = useState(null);
+
+  const streamId = route.params.streamId;
+
+  useEffect(() => {
+    (async () => {
+      const token = await AuthService.getToken();
+      axios
+        .get(ENDPOINTS.GET_LIVE_STREAM(streamId), {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((res) => {
+          console.log(res.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    })();
+  }, []);
 
   const navigateBack = () => {
     navigation.goBack();
   };
   const playerRef = useRef();
-  const { stream } = route.params;
   const bufferHandler = () => {
     console.log("buffering");
   };
@@ -22,25 +45,33 @@ export function LiveStreamScreen({ route }) {
 
   return (
     <SafeAreaView style={{ flex: 1, position: "relative" }}>
-      <Video
-        // ref={video}
-        style={{ width: "100%", height: "100%" }}
-        source={require("../assets/shorts.mp4")}
-        useNativeControls={false}
-        resizeMode="cover"
-        volume={1.0}
-        isMuted={false}
-        shouldPlay={true}
-        isLooping={true}
-        // onPlaybackStatusUpdate={(status) => setStatus(() => status)}
-      />
+      {stream ? (
+        <Video
+          // ref={video}
+          style={{ width: "100%", height: "100%" }}
+          source={{ uri: LIVE_SERVER_URL + stream.key }}
+          useNativeControls={false}
+          resizeMode="cover"
+          volume={1.0}
+          isMuted={false}
+          shouldPlay={true}
+          isLooping={true}
+          // onPlaybackStatusUpdate={(status) => setStatus(() => status)}
+        />
+      ) : (
+        <View
+          style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
+        >
+          <Text>Loading...</Text>
+        </View>
+      )}
       <View
         style={{
           position: "absolute",
           left: 0,
           right: 0,
           bottom: 0,
-          top: 30,
+          top: 0,
           justifyContent: "space-between",
         }}
       >
@@ -74,7 +105,7 @@ export function LiveStreamScreen({ route }) {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ color: "white" }}>John doe</Text>
+                <Text style={{ color: "white" }}>{stream.user.name}</Text>
                 <Text style={{ color: "lightblue", marginLeft: 5 }}>
                   +Follow
                 </Text>
@@ -102,7 +133,7 @@ export function LiveStreamScreen({ route }) {
                 style={{ height: 20, width: 20 }}
               />
               <Text style={{ color: "white" }}> Rank </Text>
-              <Text style={{ color: "yellow" }}>10</Text>
+              <Text style={{ color: "yellow" }}>{stream.user.rank}</Text>
             </View>
             {/* close button */}
             <IconButton
@@ -136,8 +167,8 @@ export function LiveStreamScreen({ route }) {
                   padding: 5,
                 }}
               >
-                <Text style={{ color: "white" }}>Live</Text>
-                <Text style={{ color: "white" }}>1.2k viewers</Text>
+                <Text style={{ color: "white" }}>{stream.viewers}</Text>
+                <Text style={{ color: "white" }}>Live viewers</Text>
               </View>
             </View>
           </View>
@@ -211,14 +242,6 @@ export function LiveStreamScreen({ route }) {
             <Image
               source={require("../assets/icons/refresh.png")}
               style={{ height: 40, width: 40 }}
-            />
-            <Image
-              source={require("../assets/icons/message.png")}
-              style={{ height: 60, width: 60 }}
-            />
-            <Image
-              source={require("../assets/icons/mic.png")}
-              style={{ height: 60, width: 60 }}
             />
             <Image
               source={require("../assets/icons/phone.png")}

@@ -7,41 +7,36 @@ import {
   useTheme,
   HelperText,
 } from "react-native-paper";
-import { useNavigation } from "@react-navigation/native";
-import AuthService from "../services/AuthService";
+
 import { useAuth } from "../hooks/useAuth";
-import axios from "axios";
 import { ENDPOINTS } from "../constants/api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFormik } from "formik";
 
 export function LoginForm() {
-  const navigator = useNavigation();
+  const { login } = useAuth();
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
+    validate: (values) => {
+      const errors = {};
+      if (!values.email) {
+        errors.email = "Email is required";
+      }
+      if (!values.password) {
+        errors.password = "Password is required";
+      }
+      return errors;
+    },
     onSubmit: (values, { setSubmitting, resetForm, setErrors, setStatus }) => {
+      setStatus(null);
       setSubmitting(true);
       console.log(values);
-      axios
-        .post(ENDPOINTS.LOGIN(), values)
-        .then((res) => {
-          console.log(res.data);
-          if (res.data) {
-            AsyncStorage.setItem("token", res.data.token);
-            // AsyncStorage.setItem("user", JSON.stringify(res.data.user));
-            navigator.navigate("AuthenticatedStack");
-          }
-        })
+      login(values)
+        .then()
         .catch((err) => {
-          console.log(err);
-          if (err.request) {
-            console.log(err.request);
-          } else {
-            setStatus(err);
-          }
+          setStatus(err);
         })
         .finally(() => {
           setSubmitting(false);
