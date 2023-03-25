@@ -32,8 +32,8 @@ export function ExploreStreamScreen() {
       })
       .then((res) => {
         if (res.data) {
-          const { streams } = res.data;
-          console.log(res.data);
+          const streams = res.data;
+          console.log(streams);
           setStreams(streams);
         }
       })

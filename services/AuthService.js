@@ -26,6 +26,7 @@ class AuthService {
     return new Promise((resolve, reject) => {
       AsyncStorage.getItem("token")
         .then((token) => {
+          console.log("getToken", token);
           resolve(token);
         })
         .catch((error) => {

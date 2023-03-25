@@ -12,7 +12,7 @@ export function StreamCard({ stream }) {
   const navigate = useNavigation();
 
   const clickHandler = () => {
-    navigate.navigate("LiveStream", { stream });
+    navigate.navigate("LiveStream", { streamId: stream?.id });
   };
   return (
     <TouchableOpacity
@@ -46,7 +46,7 @@ export function StreamCard({ stream }) {
       >
         <View style={{ flexDirection: "row" }}>
           <Text style={{ color: "white" }}>{stream.title}</Text>
-          <Image source={{ uri: stream.country.flag }} />
+          {/* <Image source={{ uri: stream.country.flag }} /> */}
         </View>
         <View style={{ flexDirection: "row" }}>
           <MaterialIcon name="people-alt" size={18} color="white" />
