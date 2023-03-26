@@ -1,9 +1,9 @@
-const HOST = "192.168.1.244";
+const HOST = "localhost";
 
 export const API_BASE_URL = `http://${HOST}:5000/api`;
 const API_TIMEOUT = 10000;
 
-export const SOCKET_SERVER_URL = `ws://${HOST}:5000`;
+export const SOCKET_SERVER_URL = `http://${HOST}:5000`;
 
 export const LIVE_SERVER_URL = `localhost:1935/live`;
 
